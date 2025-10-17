@@ -1,8 +1,10 @@
 name: Daily Commit Workflow
 
 on:
+  # Scheduled run at 08:30 UTC daily
   schedule:
     - cron: "30 8 * * *"
+  # Enable manual trigger
   workflow_dispatch:
 
 jobs:
@@ -11,21 +13,26 @@ jobs:
     name: Commit Job 21f1004710@ds.study.iitm.ac.in
 
     steps:
+      # Checkout the repository
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      # Step name includes the email
-      - name: Updating timestamp for 21f1004710@ds.study.iitm.ac.in
+      # Ensure last_run.txt exists and append timestamp
+      - name: Update timestamp for 21f1004710@ds.study.iitm.ac.in
         run: |
-          echo "Last run: $(date)" >> last_run.txt
+          # Create file if it doesn't exist, append timestamp
+          mkdir -p workflow_data
+          echo "Last run: $(date +'%Y-%m-%d %H:%M:%S')" >> workflow_data/last_run.txt
 
+      # Commit the change
       - name: Commit Changes
         run: |
           git config user.name "GitHub Action Bot"
           git config user.email "21f1004710@ds.study.iitm.ac.in"
-          git add last_run.txt
+          git add workflow_data/last_run.txt
           git commit -m "Daily commit from workflow $(date)" || echo "No changes to commit"
 
+      # Push commit back to the repo
       - name: Push Changes
         uses: ad-m/github-push-action@v0.6.0
         with:
