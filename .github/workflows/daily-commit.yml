@@ -17,7 +17,7 @@ jobs:
       # Step name includes the email
       - name: Updating timestamp for 21f1004710@ds.study.iitm.ac.in
         run: |
-          echo "Last run: $(date)" > last_run.txt
+          echo "Last run: $(date)" >> last_run.txt
 
       - name: Commit Changes
         run: |
